@@ -1,5 +1,8 @@
 call plug#begin()
 
+""" Tree-sitter for AST-based syntax highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 """ Keyword tab completion
 Plug 'ervandew/supertab'
 
@@ -62,6 +65,9 @@ set noswapfile
 set modeline
 set modelines=5
 
+""" Show a right margin indicator by default
+set colorcolumn=80
+
 """ Enter turns off any highlighted matches, then acts as normal
 nnoremap <CR> :noh<CR><CR>
 
@@ -93,5 +99,36 @@ lua << ENDLUA
     local new = (old == '' and '80') or ''
     vim.api.nvim_command(string.format('set colorcolumn=%s', new))
   end
+
+  -- Enable tree-sitter
+  require'nvim-treesitter.configs'.setup {
+    -- Languages we want to use
+    ensure_installed = {
+      'bash',
+      'c',
+      'clojure',
+      'css',
+      'go',
+      'gomod',
+      'graphql',
+      'html',
+      'javascript',
+      'json',
+      'lua',
+      'python',
+      'ruby',
+      'scss',
+      'tsx',
+      'typescript',
+      'vim',
+      'yaml',
+    },
+
+    -- Turn on syntax highlighting
+    highlight = { enable = true },
+
+    -- Turn on syntax-based indentation
+    indent = { enable = true },
+  }
 
 ENDLUA
