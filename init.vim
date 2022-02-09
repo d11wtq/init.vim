@@ -36,9 +36,6 @@ colorscheme deep-space
 """ Show line numbers
 set number
 
-""" Show search matches while typing
-set incsearch
-
 """ Force newline at end of file
 set eol
 
@@ -52,9 +49,6 @@ set clipboard=unnamed
 
 """ The current directory is relative to the current file
 set autochdir
-
-""" Don't prompt to load changed files, just load it
-set autoread
 
 """ Disable swap/backup files
 set nobackup
