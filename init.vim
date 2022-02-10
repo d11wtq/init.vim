@@ -59,6 +59,9 @@ set noswapfile
 set modeline
 set modelines=5
 
+""" Make file name completion work more like bash
+set wildmode=longest,list
+
 """ Show a right margin indicator by default
 set colorcolumn=80
 
@@ -120,9 +123,6 @@ lua << ENDLUA
 
     -- Turn on syntax highlighting
     highlight = { enable = true },
-
-    -- Turn on syntax-based indentation
-    indent = { enable = true },
   }
 
 ENDLUA
