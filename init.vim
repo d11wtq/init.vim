@@ -3,12 +3,23 @@ call plug#begin()
 """ Tree-sitter for AST-based syntax highlighting
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+""" LSP support
+Plug 'neovim/nvim-lspconfig'
+
+""" A LUA utility library for other plugins
+Plug 'nvim-lua/plenary.nvim'
+
+""" TypeScript LSP integration
+Plug 'pmizio/typescript-tools.nvim'
+
 """ Keyword tab completion
 Plug 'ervandew/supertab'
 
 """ Install fzf for fuzzy-find
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+
+Plug 'Vimjas/vim-python-pep8-indent'
 
 """ Easy manipulation of surrounding parentheses, quotes etc
 Plug 'tpope/vim-surround'
@@ -19,19 +30,22 @@ Plug 'tommcdo/vim-express'
 """ Make trailing whitespace noisy
 Plug 'bronson/vim-trailing-whitespace'
 
-""" A nice dark color scheme
-Plug 'tyrannicaltoucan/vim-deep-space'
+""" High-contrast color schema
+Plug 'rigellute/rigel'
 
 """ Initialize vim-plug
 call plug#end()
 
 """ Setting the leader to ';' is much easier to type
-let mapleader = ";"
+let mapleader = ';'
+
+""" Disable mouse interactions.
+set mouse=
 
 """ Setup the color scheme
 set background=dark
 set termguicolors
-colorscheme deep-space
+colorscheme rigel
 
 """ Show line numbers
 set number
@@ -49,6 +63,9 @@ set clipboard=unnamed
 
 """ The current directory is relative to the current file
 set autochdir
+
+""" Changes to files are automatically reloaded
+set autoread
 
 """ Disable swap/backup files
 set nobackup
@@ -98,7 +115,7 @@ lua << ENDLUA
   end
 
   -- Enable tree-sitter
-  require'nvim-treesitter.configs'.setup {
+  require('nvim-treesitter.configs').setup({
     -- Languages we want to use
     ensure_installed = {
       'bash',
@@ -114,6 +131,7 @@ lua << ENDLUA
       'lua',
       'python',
       'ruby',
+      'rust',
       'scss',
       'tsx',
       'typescript',
@@ -121,8 +139,17 @@ lua << ENDLUA
       'yaml',
     },
 
+    -- Languages causing issues.
+    ignore_install = {
+      'perl',
+    },
+
     -- Turn on syntax highlighting
     highlight = { enable = true },
-  }
+  })
+
+  -- Enable TypeScript LSP
+  require('typescript-tools').setup({
+  })
 
 ENDLUA
