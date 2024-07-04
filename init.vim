@@ -131,6 +131,7 @@ lua << ENDLUA
       'bash',
       'c',
       'clojure',
+      'cpp',
       'css',
       'go',
       'gomod',
