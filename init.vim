@@ -21,6 +21,9 @@ Plug 'junegunn/fzf.vim'
 
 Plug 'Vimjas/vim-python-pep8-indent'
 
+""" Kanagawa colorscheme
+Plug 'rebelot/kanagawa.nvim'
+
 """ Easy manipulation of surrounding parentheses, quotes etc
 Plug 'tpope/vim-surround'
 
@@ -30,7 +33,7 @@ Plug 'tommcdo/vim-express'
 """ Make trailing whitespace noisy
 Plug 'bronson/vim-trailing-whitespace'
 
-""" High-contrast color schema
+""" High-contrast color scheme
 Plug 'rigellute/rigel'
 
 """ Initialize vim-plug
@@ -45,7 +48,7 @@ set mouse=
 """ Setup the color scheme
 set background=dark
 set termguicolors
-colorscheme rigel
+colorscheme kanagawa
 
 """ Show line numbers
 set number
@@ -104,6 +107,13 @@ nnoremap <Leader>/ :e $MYVIMRC<CR>
 nnoremap <C-b> :Buffers<CR>
 nnoremap <C-p> :GFiles<CR>
 
+""" The default 50 character limit on commit messages is brutal.
+let gitcommit_summary_length = 70
+
+""" LLVM IR Files are .ll, but it seems to conflict with something called
+""" "lifelines"
+au BufRead,BufNewFile *.ll set filetype=llvm
+
 """ Lua definitions follow
 lua << ENDLUA
 
@@ -128,6 +138,7 @@ lua << ENDLUA
       'html',
       'javascript',
       'json',
+      'llvm',
       'lua',
       'python',
       'ruby',
@@ -140,16 +151,18 @@ lua << ENDLUA
     },
 
     -- Languages causing issues.
-    ignore_install = {
-      'perl',
-    },
+    ignore_install = { 'perl', 'latex', },
 
     -- Turn on syntax highlighting
     highlight = { enable = true },
+    indent = { enable = true },
   })
 
-  -- Enable TypeScript LSP
-  require('typescript-tools').setup({
-  })
+  -- Enable LSP for Various Languages
+  local servers = { 'sorbet', 'clangd', 'tsserver', }
+  for _, lsp in pairs(servers) do
+    require('lspconfig')[lsp].setup({
+    })
+  end
 
 ENDLUA
