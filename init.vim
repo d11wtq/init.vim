@@ -156,14 +156,27 @@ lua << ENDLUA
 
     -- Turn on syntax highlighting
     highlight = { enable = true },
-    indent = { enable = true },
+    indent = {
+      enable = true,
+      disable = { 'ruby', 'rust' },
+    },
   })
 
   -- Enable LSP for Various Languages
-  local servers = { 'sorbet', 'clangd', 'tsserver', }
+  local servers = { 'sorbet', 'clangd', 'rust_analyzer', 'tsserver', 'syntax_tree' }
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup({
+      diagnostics = {
+        enable = { 'rust_analyzer', 'sorbet', 'clangd', 'syntax_tree' },
+      },
+      on_attach = function(client, bufnr)
+        -- TypeScript LSP messes with prettier
+        if client.name == 'tsserver' then
+          client.server_capabilities.documentFormattingProvider = false
+        end
+      end,
     })
   end
 
+  vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 ENDLUA
