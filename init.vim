@@ -163,7 +163,8 @@ lua << ENDLUA
   })
 
   -- Enable LSP for Various Languages
-  local servers = { 'sorbet', 'clangd', 'rust_analyzer', 'tsserver', 'syntax_tree' }
+  local servers = { 'clangd', 'rust_analyzer', 'sorbet', 'ts_ls', 'syntax_tree' }
+  -- Ideally we'd enable ruby_lsp, but it consumes 100% CPU.
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup({
       diagnostics = {
@@ -171,12 +172,16 @@ lua << ENDLUA
       },
       on_attach = function(client, bufnr)
         -- TypeScript LSP messes with prettier
-        if client.name == 'tsserver' then
+        if client.name == 'ts_ls' then
           client.server_capabilities.documentFormattingProvider = false
         end
       end,
     })
   end
+
+  -- This should be working out of the box, but for some reason diagnostic
+  -- errors were not showing inline, so explicitly enabling it
+  vim.diagnostic.config({ virtual_text = true })
 
   vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.format()]]
 ENDLUA
